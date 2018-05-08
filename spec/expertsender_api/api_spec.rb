@@ -204,9 +204,22 @@ describe ExpertSenderApi::API do
 
   context 'when has wrong api key' do
     subject { ExpertSenderApi::API.new key: 'wrong', api_endpoint: api_endpoint, throws_exceptions: true }
-
+    let!(:request){
+      stub_request(:post, "#{api_endpoint}/Api/Subscribers").to_return(
+        status: 403,
+        body: <<~XML
+        <ApiResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+          <ErrorMessage>
+            <Code>403</Code>
+            <Message>Supplied API key is invalid.</Message>
+          </ErrorMessage>
+        </ApiResponse>
+        XML
+      )
+    }
     it '#add_subscribers_to_list raises exception' do
       expect { subject.add_subscribers_to_list(subscribers) }.to raise_error(ExpertSenderApi::ExpertSenderError)
+      expect(request).to have_been_made
     end
   end
 
