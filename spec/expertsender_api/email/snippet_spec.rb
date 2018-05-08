@@ -10,8 +10,8 @@ describe ExpertSenderApi::Email::Snippet do
     end
 
     it 'has proper attributes' do
-      subject.name.should eq valid_attributes[:name]
-      subject.value.should eq valid_attributes[:value]
+      expect(subject.name).to eq valid_attributes[:name]
+      expect(subject.value).to eq valid_attributes[:value]
     end
 
     it 'generates proper markup' do
@@ -21,8 +21,8 @@ describe ExpertSenderApi::Email::Snippet do
 
       xml = Nokogiri::XML(builder.to_xml)
 
-      xml.xpath('//Name').text.should eq valid_attributes[:name]
-      xml.xpath('//Value').text.should eq valid_attributes[:value]
+      expect(xml.xpath('//Name').text).to eq valid_attributes[:name]
+      expect(xml.xpath('//Value').text).to eq valid_attributes[:value]
     end
   end
 end

@@ -90,7 +90,7 @@ describe ExpertSenderApi::API do
   context 'when configured properly' do
     subject { ExpertSenderApi::API.new key: api_key, api_endpoint: api_endpoint }
 
-    its '#add_subscribers_to_list calls post with correct body' do
+    it '#add_subscribers_to_list calls post with correct body' do
       builder = Nokogiri::XML::Builder.new do |xml|
         xml.ApiRequest(ExpertSenderApi::API::XML_NAMESPACES) {
           xml.ApiKey api_key
@@ -106,7 +106,7 @@ describe ExpertSenderApi::API do
       subject.add_subscribers_to_list(subscribers)
     end
 
-    its '#remove_subscriber_from_list by id calls delete with correct parameters' do
+    it '#remove_subscriber_from_list by id calls delete with correct parameters' do
       expected_params = { apiKey: api_key,
                           listId: subscriber_attributes[:list_id] }
       expect_delete("#{subscribers_url}/#{subscriber_attributes[:id]}", expected_params)
@@ -114,7 +114,7 @@ describe ExpertSenderApi::API do
       subject.remove_subscriber_from_list(id: subscriber_attributes[:id], listId: subscriber_attributes[:list_id])
     end
 
-    its '#remove_subscriber_from_list by email returns success response' do
+    it '#remove_subscriber_from_list by email returns success response' do
       expected_params = { apiKey: api_key,
                           email: subscriber_attributes[:email],
                           listId: subscriber_attributes[:list_id] }
@@ -123,7 +123,7 @@ describe ExpertSenderApi::API do
       subject.remove_subscriber_from_list(email: subscriber_attributes[:email], listId: subscriber_attributes[:list_id])
     end
 
-    its '#get_subscriber_info calls get with correct parameters' do
+    it '#get_subscriber_info calls get with correct parameters' do
       expected_params = { apiKey: api_key,
                           email: subscriber_attributes[:email],
                           option: ExpertSenderApi::API::SUBSCRIBER_INFO_OPTION_FULL }
@@ -132,7 +132,7 @@ describe ExpertSenderApi::API do
       subject.get_subscriber_info(email: subscriber_attributes[:email])
     end
 
-    its '#create_and_send_email calls post with correct body' do
+    it '#create_and_send_email calls post with correct body' do
 
       builder = Nokogiri::XML::Builder.new do |xml|
         xml.ApiRequest(ExpertSenderApi::API::XML_NAMESPACES) {
@@ -150,7 +150,7 @@ describe ExpertSenderApi::API do
       subject.create_and_send_email(recipients: recipients, content: content)
     end
 
-    its '#send_transaction_email' do
+    it '#send_transaction_email' do
       letter_id = 93
 
       builder = Nokogiri::XML::Builder.new do |xml|
@@ -175,7 +175,7 @@ describe ExpertSenderApi::API do
                                      snippets: snippets)
     end
 
-    its '#get_deleted_subscribers calls get with correct parameters' do
+    it '#get_deleted_subscribers calls get with correct parameters' do
       expected_params = { apiKey: api_key,
                           listIds: '52,53',
                           removeTypes: 'OptOutLink,Compliant,Ui',
@@ -190,7 +190,7 @@ describe ExpertSenderApi::API do
                                       end_date: Date.new(2090, 1, 1))
     end
 
-    its '#get_activities calls get with correct parameters' do
+    it '#get_activities calls get with correct parameters' do
       expected_params = { apiKey: api_key,
                           date: Date.today.to_s,
                           type: ExpertSenderApi::Activity::Clicks }
@@ -205,7 +205,7 @@ describe ExpertSenderApi::API do
   context 'when has wrong api key' do
     subject { ExpertSenderApi::API.new key: 'wrong', api_endpoint: api_endpoint, throws_exceptions: true }
 
-    its '#add_subscribers_to_list raises exception' do
+    it '#add_subscribers_to_list raises exception' do
       expect { subject.add_subscribers_to_list(subscribers) }.to raise_error(ExpertSenderApi::ExpertSenderError)
     end
   end
@@ -220,24 +220,26 @@ describe ExpertSenderApi::API do
   end
 
   def expect_get(expected_url, expected_params)
-    ExpertSenderApi::API.should_receive(:get).with do |url, opts|
+    expect(described_class).to receive(:get){|url, opts|
       expect(url).to eq expected_url
       expect(expected_params).to eq opts[:query]
-    end.and_return(Struct.new(:body).new(nil))
+      Struct.new(:body).new(nil)
+    }
   end
 
   def expect_post(expected_url, expected_body)
-    ExpertSenderApi::API.should_receive(:post).with do |url, opts|
+    expect(described_class).to receive(:post){|url, opts|
       expect(url).to eq expected_url
       expect(expected_body).to eq opts[:body]
-    end.and_return(Struct.new(:body).new(nil))
+      Struct.new(:body).new(nil)
+    }
   end
 
   def expect_delete(expected_url, expected_params)
-    ExpertSenderApi::API.should_receive(:delete).with do |url, opts|
+    expect(described_class).to receive(:delete){|url, opts|
       expect(url).to eq expected_url
       expect(expected_params).to eq opts[:query]
-    end.and_return(Struct.new(:body).new(nil))
+      Struct.new(:body).new(nil)
+    }
   end
 end
-

@@ -16,7 +16,7 @@ describe ExpertSenderApi::Email::Content do
 
     it 'has proper attributes' do
       valid_attributes.each do |key, value|
-        subject.send(key).should eq value
+        expect(subject.send(key)).to eq value
       end
     end
 
@@ -27,13 +27,13 @@ describe ExpertSenderApi::Email::Content do
 
       xml = Nokogiri::XML(builder.to_xml)
 
-      xml.xpath('//FromName').text.should eq valid_attributes[:from_name]
-      xml.xpath('//FromEmail').text.should eq valid_attributes[:from_email]
-      xml.xpath('//ReplyToName').text.should eq valid_attributes[:reply_to_name]
-      xml.xpath('//ReplyToEmail').text.should eq valid_attributes[:reply_to_email]
-      xml.xpath('//Subject').text.should eq valid_attributes[:subject]
-      xml.xpath('//Html').text.should eq valid_attributes[:html]
-      xml.xpath('//Plain').text.should eq valid_attributes[:plain]
+      expect(xml.xpath('//FromName').text).to eq valid_attributes[:from_name]
+      expect(xml.xpath('//FromEmail').text).to eq valid_attributes[:from_email]
+      expect(xml.xpath('//ReplyToName').text).to eq valid_attributes[:reply_to_name]
+      expect(xml.xpath('//ReplyToEmail').text).to eq valid_attributes[:reply_to_email]
+      expect(xml.xpath('//Subject').text).to eq valid_attributes[:subject]
+      expect(xml.xpath('//Html').text).to eq valid_attributes[:html]
+      expect(xml.xpath('//Plain').text).to eq valid_attributes[:plain]
     end
   end
 end

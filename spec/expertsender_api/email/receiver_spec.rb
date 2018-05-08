@@ -11,9 +11,9 @@ describe ExpertSenderApi::Email::Receiver do
     end
 
     it 'has proper attributes' do
-      subject.id.should eq valid_attributes[:id]
-      subject.email.should eq valid_attributes[:email]
-      subject.list_id.should eq valid_attributes[:list_id]
+      expect(subject.id).to eq valid_attributes[:id]
+      expect(subject.email).to eq valid_attributes[:email]
+      expect(subject.list_id).to eq valid_attributes[:list_id]
     end
 
     it 'generates proper markup' do
@@ -23,9 +23,9 @@ describe ExpertSenderApi::Email::Receiver do
 
       xml = Nokogiri::XML(builder.to_xml)
 
-      xml.xpath('//Receiver/Id').text.should eq valid_attributes[:id]
-      xml.xpath('//Receiver/Email').text.should eq valid_attributes[:email]
-      xml.xpath('//Receiver/ListId').text.should eq valid_attributes[:list_id]
+      expect(xml.xpath('//Receiver/Id').text).to eq valid_attributes[:id]
+      expect(xml.xpath('//Receiver/Email').text).to eq valid_attributes[:email]
+      expect(xml.xpath('//Receiver/ListId').text).to eq valid_attributes[:list_id]
     end
   end
 end

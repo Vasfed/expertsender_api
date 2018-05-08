@@ -10,7 +10,7 @@ describe ExpertSenderApi::Email::Recipients do
 
     it 'has proper attributes' do
       valid_attributes.each do |key, value|
-        subject.send(key).should eq value
+        expect(subject.send(key)).to eq value
       end
     end
 
@@ -21,7 +21,7 @@ describe ExpertSenderApi::Email::Recipients do
 
       xml = Nokogiri::XML(builder.to_xml)
 
-      xml.xpath('//SubscriberLists/SubscriberList').map(&:text).should eq valid_attributes[:subscriber_lists].map(&:to_s)
+      expect(xml.xpath('//SubscriberLists/SubscriberList').map(&:text)).to eq valid_attributes[:subscriber_lists].map(&:to_s)
     end
   end
 end
