@@ -60,6 +60,18 @@ module ExpertSenderApi
       handle_response(response)
     end
 
+    def add_to_stop_list list_id:, entry:
+      response = self.class.post("#{@api_endpoint}/Api/SuppressionLists/#{list_id}",
+        query: { apiKey: api_key, entry: entry })
+      handle_response(response)
+    end
+
+    def remove_from_stop_list list_id:, entry:
+      response = self.class.delete("#{@api_endpoint}/Api/SuppressionLists/#{list_id}",
+        query: { apiKey: api_key, entry: entry })
+      handle_response(response)
+    end
+
     def get_subscriber_info(option: SUBSCRIBER_INFO_OPTION_FULL, email: nil)
       params = { apiKey: api_key, email: email, option: option }
 
@@ -196,4 +208,3 @@ module ExpertSenderApi
     end
   end
 end
-

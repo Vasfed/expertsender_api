@@ -132,6 +132,20 @@ describe ExpertSenderApi::API do
       subject.get_subscriber_info(email: subscriber_attributes[:email])
     end
 
+    it "#add_to_stop_list" do
+      req = stub_request(:post, "#{api_endpoint}/Api/SuppressionLists/123?apiKey=#{api_key}&entry=username%40example.com").
+        to_return(status:201, body: '')
+      subject.add_to_stop_list(list_id: 123, entry: 'username@example.com')
+      expect(req).to have_been_made
+    end
+
+    it "#remove_from_stop_list" do
+      req = stub_request(:delete, "#{api_endpoint}/Api/SuppressionLists/123?apiKey=#{api_key}&entry=username%40example.com").
+        to_return(status:201, body: '')
+      subject.remove_from_stop_list(list_id: 123, entry: 'username@example.com')
+      expect(req).to have_been_made
+    end
+
     it '#create_and_send_email calls post with correct body' do
 
       builder = Nokogiri::XML::Builder.new do |xml|
